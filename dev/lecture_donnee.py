@@ -12,14 +12,26 @@ def chargement_donnees():
     # Attention: suppression du point final dans le nom de fichier
     csv_path = Path("data/Listings.csv")
 
-    enc = detect_encoding(csv_path)
-    try:
-        data_listings = pd.read_csv(csv_path, sep=",", encoding=enc, low_memory=False)
-    except UnicodeDecodeError:
-        # fallback Windows fréquent
-        data_listings = pd.read_csv(csv_path, sep=",", encoding="cp1252", low_memory=False)
+    detected = detect_encoding(csv_path)
+    tried_encodings = ["utf-8", detected, "latin-1"]
+    data_listings = None
+    for enc in tried_encodings:
+        if not enc:
+            continue
+        try:
+            data_listings = pd.read_csv(csv_path, sep=",", encoding=enc, low_memory=False)
+            break
+        except (UnicodeDecodeError, LookupError):
+            continue
+    if data_listings is None:
+        # As a last resort use latin-1 which maps all bytes 0-255
+        data_listings = pd.read_csv(csv_path, sep=",", encoding="latin-1", low_memory=False)
 
     data_listings = data_listings[data_listings["city"] == "Paris"]
     return data_listings
 
 df = chargement_donnees()
+df.to_csv("C:\\Users\\alice\\OneDrive - Université de Poitiers\\INGE2\\cloneGIT_airbnb\\Projet-tutor-\\datalistings_paris.csv", index=False, encoding="utf-8-sig")  # Export pour éviter de refaire le chargement à chaque fois
+print(df.head())
+print(df.info())
+print(df.shape)

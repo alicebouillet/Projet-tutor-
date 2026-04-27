@@ -31,7 +31,7 @@ def chargement_donnees():
     return data_listings
 
 df = chargement_donnees()
-df.to_csv("C:\\Users\\alice\\OneDrive - Université de Poitiers\\INGE2\\cloneGIT_airbnb\\Projet-tutor-\\datalistings_paris.csv", index=False, encoding="utf-8-sig")  # Export pour éviter de refaire le chargement à chaque fois
+df.to_csv("C:\\Users\\alice\\OneDrive - Université de Poitiers\\INGE2\\cloneGIT_airbnb\\Projet-tutor-\\data\\datalistings_paris.csv", index=False, encoding="utf-8-sig")  # Export pour éviter de refaire le chargement à chaque fois
 print(df.head())
 print(df.info())
 print(df.shape)

@@ -5,7 +5,7 @@ import matplotlib.patches as mpatches
 import seaborn as sns
 from matplotlib.colors import ListedColormap
 
-df = pd.read_csv("data/datalistings_paris.csv", encoding="utf-8-sig")
+df = pd.read_csv("data/airbnb_enrichi.csv", encoding="utf-8-sig")
 # --- Tableau complet (% null de chaque colonne), trié décroissant ---
 table_df = pd.DataFrame({
     "Colonne": df.columns,

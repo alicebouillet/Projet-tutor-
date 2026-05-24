@@ -3,9 +3,9 @@ import geopandas as gpd
 from shapely.geometry import Point
 import folium
 import requests
-
+#regarder dans les arrondissment les points 
 #. Chargement des données
-df = pd.read_csv("data/datalistings_paris.csv")  
+df = pd.read_csv("data/airbnb_enrichi.csv")  
 df = df.dropna(subset=["latitude", "longitude"])
 
 #Contours officiels des arrondissements de Paris (open data)
@@ -16,6 +16,9 @@ arrondissements = arrondissements[["l_aroff", "geometry"]].rename(columns={"l_ar
 # Jointure spatiale lat/lon → arrondissement 
 gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs="EPSG:4326")
 arrondissements = arrondissements.to_crs("EPSG:4326")
+# Supprimer la colonne arrondissement existante pour éviter les conflits
+if "arrondissement" in gdf.columns:
+    gdf = gdf.drop(columns=["arrondissement"])
 gdf = gpd.sjoin(gdf, arrondissements, how="left", predicate="within")
 
 # Agrégation par arrondissement 

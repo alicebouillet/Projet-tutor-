@@ -1,0 +1,546 @@
+{
+  "model_info": {
+    "type": "LightGBM + OrdinalEncoder",
+    "target": "log1p(price)",
+    "features_count": 48,
+    "train_rows": 51044,
+    "metrics": {
+      "MAE_eur": 28.5,
+      "RMSE_eur": 46.43,
+      "R2": 0.539,
+      "MAPE_pct": 29.5
+    }
+  },
+  "features": [
+    "neighbourhood",
+    "latitude",
+    "longitude",
+    "property_type",
+    "room_type",
+    "accommodates",
+    "minimum_nights",
+    "maximum_nights",
+    "instant_bookable",
+    "amenity_wifi",
+    "amenity_tv",
+    "amenity_kitchen",
+    "amenity_washer",
+    "amenity_air_conditioning",
+    "amenity_heating",
+    "amenity_parking",
+    "amenity_bathtub",
+    "amenity_shampoo",
+    "amenity_coffee",
+    "amenity_pets_allowed",
+    "amenity_pool",
+    "amenity_long_term_stays_allowed",
+    "amenity_essentials",
+    "amenity_elevator",
+    "amenity_smoke_alarm",
+    "amenity_fire_extinguisher",
+    "amenity_iron",
+    "amenity_hot_water",
+    "amenity_hangers",
+    "amenity_dedicated_workspace",
+    "amenity_host_greets_you",
+    "amenity_carbon_monoxide_alarm",
+    "amenity_stove",
+    "amenity_dishes_and_silverware",
+    "amenity_bed_linens",
+    "amenity_indoor_fireplace",
+    "amenity_breakfast",
+    "amenity_first_aid_kit",
+    "amenity_luggage_dropoff_allowed",
+    "amenity_patio_or_balcony",
+    "amenity_extra_pillows_and_blankets",
+    "amenity_private_entrance",
+    "amenity_ethernet_connection",
+    "amenity_lockbox",
+    "flag_metro",
+    "flag_rer",
+    "flag_gare_sncf",
+    "flag_transport"
+  ],
+  "categorical_features": [
+    "neighbourhood",
+    "property_type",
+    "room_type",
+    "instant_bookable"
+  ],
+  "numerical_features": [
+    "latitude",
+    "longitude",
+    "accommodates",
+    "minimum_nights",
+    "maximum_nights",
+    "amenity_wifi",
+    "amenity_tv",
+    "amenity_kitchen",
+    "amenity_washer",
+    "amenity_air_conditioning",
+    "amenity_heating",
+    "amenity_parking",
+    "amenity_bathtub",
+    "amenity_shampoo",
+    "amenity_coffee",
+    "amenity_pets_allowed",
+    "amenity_pool",
+    "amenity_long_term_stays_allowed",
+    "amenity_essentials",
+    "amenity_elevator",
+    "amenity_smoke_alarm",
+    "amenity_fire_extinguisher",
+    "amenity_iron",
+    "amenity_hot_water",
+    "amenity_hangers",
+    "amenity_dedicated_workspace",
+    "amenity_host_greets_you",
+    "amenity_carbon_monoxide_alarm",
+    "amenity_stove",
+    "amenity_dishes_and_silverware",
+    "amenity_bed_linens",
+    "amenity_indoor_fireplace",
+    "amenity_breakfast",
+    "amenity_first_aid_kit",
+    "amenity_luggage_dropoff_allowed",
+    "amenity_patio_or_balcony",
+    "amenity_extra_pillows_and_blankets",
+    "amenity_private_entrance",
+    "amenity_ethernet_connection",
+    "amenity_lockbox",
+    "flag_metro",
+    "flag_rer",
+    "flag_gare_sncf",
+    "flag_transport"
+  ],
+  "feature_importance": {
+    "latitude": 9895,
+    "longitude": 9577,
+    "maximum_nights": 4142,
+    "minimum_nights": 3916,
+    "accommodates": 2607,
+    "neighbourhood": 2586,
+    "property_type": 1960,
+    "instant_bookable": 682,
+    "amenity_elevator": 678,
+    "amenity_shampoo": 668,
+    "amenity_hot_water": 651,
+    "amenity_dedicated_workspace": 633,
+    "amenity_smoke_alarm": 603,
+    "amenity_iron": 602,
+    "amenity_carbon_monoxide_alarm": 594,
+    "amenity_hangers": 566,
+    "amenity_tv": 542,
+    "amenity_coffee": 515,
+    "amenity_parking": 495,
+    "amenity_bed_linens": 474,
+    "amenity_dishes_and_silverware": 464,
+    "amenity_air_conditioning": 435,
+    "amenity_host_greets_you": 433,
+    "room_type": 432,
+    "amenity_private_entrance": 420,
+    "amenity_fire_extinguisher": 413,
+    "amenity_stove": 373,
+    "amenity_breakfast": 370,
+    "amenity_first_aid_kit": 369,
+    "amenity_essentials": 347,
+    "amenity_indoor_fireplace": 325,
+    "amenity_extra_pillows_and_blankets": 321,
+    "amenity_luggage_dropoff_allowed": 317,
+    "amenity_washer": 304,
+    "amenity_bathtub": 302,
+    "amenity_patio_or_balcony": 293,
+    "amenity_ethernet_connection": 241,
+    "amenity_heating": 235,
+    "amenity_wifi": 230,
+    "amenity_kitchen": 229,
+    "amenity_lockbox": 204,
+    "amenity_long_term_stays_allowed": 92,
+    "amenity_pool": 65,
+    "amenity_pets_allowed": 0,
+    "flag_metro": 0,
+    "flag_rer": 0,
+    "flag_gare_sncf": 0,
+    "flag_transport": 0
+  },
+  "top_features": [
+    "latitude",
+    "longitude",
+    "maximum_nights",
+    "minimum_nights",
+    "accommodates",
+    "neighbourhood",
+    "property_type",
+    "instant_bookable",
+    "amenity_elevator",
+    "amenity_shampoo"
+  ],
+  "encoders": {
+    "neighbourhood": [
+      "Batignolles-Monceau",
+      "Bourse",
+      "Buttes-Chaumont",
+      "Buttes-Montmartre",
+      "Elysee",
+      "Enclos-St-Laurent",
+      "Gobelins",
+      "Hotel-de-Ville",
+      "Louvre",
+      "Luxembourg",
+      "Menilmontant",
+      "Observatoire",
+      "Opera",
+      "Palais-Bourbon",
+      "Pantheon",
+      "Passy",
+      "Popincourt",
+      "Reuilly",
+      "Temple",
+      "Vaugirard"
+    ],
+    "property_type": [
+      "Barn",
+      "Boat",
+      "Camper/RV",
+      "Campsite",
+      "Casa particular",
+      "Cave",
+      "Dome house",
+      "Earth house",
+      "Entire apartment",
+      "Entire bed and breakfast",
+      "Entire bungalow",
+      "Entire chalet",
+      "Entire condominium",
+      "Entire cottage",
+      "Entire floor",
+      "Entire guest suite",
+      "Entire guesthouse",
+      "Entire home/apt",
+      "Entire house",
+      "Entire loft",
+      "Entire place",
+      "Entire serviced apartment",
+      "Entire townhouse",
+      "Entire villa",
+      "Houseboat",
+      "Island",
+      "Private room",
+      "Private room in apartment",
+      "Private room in bed and breakfast",
+      "Private room in boat",
+      "Private room in cabin",
+      "Private room in casa particular",
+      "Private room in chalet",
+      "Private room in condominium",
+      "Private room in earth house",
+      "Private room in guest suite",
+      "Private room in guesthouse",
+      "Private room in hostel",
+      "Private room in house",
+      "Private room in houseboat",
+      "Private room in loft",
+      "Private room in nature lodge",
+      "Private room in serviced apartment",
+      "Private room in townhouse",
+      "Private room in villa",
+      "Room in aparthotel",
+      "Room in bed and breakfast",
+      "Room in boutique hotel",
+      "Room in hostel",
+      "Room in hotel",
+      "Room in serviced apartment",
+      "Shared room in apartment",
+      "Shared room in bed and breakfast",
+      "Shared room in cabin",
+      "Shared room in condominium",
+      "Shared room in guest suite",
+      "Shared room in guesthouse",
+      "Shared room in hostel",
+      "Shared room in house",
+      "Shared room in igloo",
+      "Shared room in loft",
+      "Shared room in serviced apartment",
+      "Shared room in tiny house",
+      "Shared room in townhouse",
+      "Tiny house",
+      "Treehouse"
+    ],
+    "room_type": [
+      "Entire place",
+      "Hotel room",
+      "Private room",
+      "Shared room"
+    ],
+    "instant_bookable": [
+      "f",
+      "t"
+    ]
+  },
+  "numerical_ranges": {
+    "latitude": {
+      "min": 48.81317,
+      "max": 48.90491,
+      "mean": 48.86418948013478,
+      "median": 48.86544
+    },
+    "longitude": {
+      "min": 2.22868,
+      "max": 2.46705,
+      "mean": 2.3454997644385234,
+      "median": 2.34837
+    },
+    "accommodates": {
+      "min": 1.0,
+      "max": 16.0,
+      "mean": 2.998385706449338,
+      "median": 2.0
+    },
+    "minimum_nights": {
+      "min": 1.0,
+      "max": 9999.0,
+      "mean": 5.741023430765614,
+      "median": 2.0
+    },
+    "maximum_nights": {
+      "min": 1.0,
+      "max": 10000000.0,
+      "mean": 851.8358592586787,
+      "median": 1125.0
+    },
+    "amenity_wifi": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.9379985894522372,
+      "median": 1.0
+    },
+    "amenity_tv": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.6655591254603871,
+      "median": 1.0
+    },
+    "amenity_kitchen": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.942590706057519,
+      "median": 1.0
+    },
+    "amenity_washer": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.9171851735757386,
+      "median": 1.0
+    },
+    "amenity_air_conditioning": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.09561946555912545,
+      "median": 0.0
+    },
+    "amenity_heating": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.9461797664759815,
+      "median": 1.0
+    },
+    "amenity_parking": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.2504505916464227,
+      "median": 0.0
+    },
+    "amenity_bathtub": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.09007131102578168,
+      "median": 0.0
+    },
+    "amenity_shampoo": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.6217851265574799,
+      "median": 1.0
+    },
+    "amenity_coffee": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.37736854478489146,
+      "median": 0.0
+    },
+    "amenity_pets_allowed": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.00034480056421910506,
+      "median": 0.0
+    },
+    "amenity_pool": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.003432332889272001,
+      "median": 0.0
+    },
+    "amenity_long_term_stays_allowed": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.7949377008071468,
+      "median": 1.0
+    },
+    "amenity_essentials": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.9284382101716167,
+      "median": 1.0
+    },
+    "amenity_elevator": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.37343468380220984,
+      "median": 0.0
+    },
+    "amenity_smoke_alarm": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.7156335710367526,
+      "median": 1.0
+    },
+    "amenity_fire_extinguisher": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.14161899537653788,
+      "median": 0.0
+    },
+    "amenity_iron": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.6793668207820703,
+      "median": 1.0
+    },
+    "amenity_hot_water": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.5524645403965206,
+      "median": 1.0
+    },
+    "amenity_hangers": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.6952433194890683,
+      "median": 1.0
+    },
+    "amenity_dedicated_workspace": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.5988872345427474,
+      "median": 1.0
+    },
+    "amenity_host_greets_you": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.18044040435702532,
+      "median": 0.0
+    },
+    "amenity_carbon_monoxide_alarm": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.23231721651908158,
+      "median": 0.0
+    },
+    "amenity_stove": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.2937857534675966,
+      "median": 0.0
+    },
+    "amenity_dishes_and_silverware": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.46070057205548154,
+      "median": 0.0
+    },
+    "amenity_bed_linens": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.358185095211974,
+      "median": 0.0
+    },
+    "amenity_indoor_fireplace": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.06309850325209623,
+      "median": 0.0
+    },
+    "amenity_breakfast": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.13265418070684115,
+      "median": 0.0
+    },
+    "amenity_first_aid_kit": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1496747903769297,
+      "median": 0.0
+    },
+    "amenity_luggage_dropoff_allowed": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.13715226079460857,
+      "median": 0.0
+    },
+    "amenity_patio_or_balcony": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.07883394718282266,
+      "median": 0.0
+    },
+    "amenity_extra_pillows_and_blankets": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1701747511950474,
+      "median": 0.0
+    },
+    "amenity_private_entrance": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.1460857299584672,
+      "median": 0.0
+    },
+    "amenity_ethernet_connection": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.06463443303816316,
+      "median": 0.0
+    },
+    "amenity_lockbox": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.061280463913486405,
+      "median": 0.0
+    },
+    "flag_metro": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0
+    },
+    "flag_rer": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0
+    },
+    "flag_gare_sncf": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0
+    },
+    "flag_transport": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0
+    }
+  }
+}

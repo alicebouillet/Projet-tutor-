@@ -1,0 +1,27 @@
+# Application Web
+streamlit>=1.30.0
+
+# Data Science & Manipulation
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+joblib>=1.3.0
+xgboost>=2.0.0
+lightgbm>=4.0.0
+catboost>=1.2.0
+
+# Visualisation
+matplotlib>=3.7.0
+plotly>=5.17.0
+seaborn>=0.12.0
+
+# Géospatial
+geopandas>=0.14.0
+folium>=0.15.0
+shapely>=2.0.0
+branca>=0.6.0
+
+# Utilitaires
+requests>=2.31.0

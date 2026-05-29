@@ -38,9 +38,9 @@ def _load_data() -> pd.DataFrame | None:
     if "longitude" in df.columns:
         df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
     
-    # Filtrer les prix aberrants (> 1000€)
+    # Filtrer les prix aberrants (> 3000€)
     if "price" in df.columns:
-        df = df[df["price"] <= 1000]
+        df = df[df["price"] <= 3000]
     
     return df
 
@@ -166,6 +166,8 @@ def _create_points_map(df: pd.DataFrame, sample_size: int = 1000) -> folium.Map:
 
 def _create_choropleth_map(arrondissements: gpd.GeoDataFrame) -> folium.Map:
     """Crée une carte choroplèthe par arrondissement."""
+    import branca.colormap as cm
+    
     # Créer la carte centrée sur Paris
     m = folium.Map(
         location=[48.8566, 2.3522],
@@ -173,36 +175,49 @@ def _create_choropleth_map(arrondissements: gpd.GeoDataFrame) -> folium.Map:
         tiles="CartoDB positron"
     )
     
-    # Métriques à afficher
+    # Métriques à afficher avec colormaps personnalisées
     metriques = {
-        "nb_annonces": ("Nombre d'annonces", "YlOrRd"),
-        "prix_moyen": ("Prix moyen (€)", "YlGn"),
-        "note_moyenne": ("Note moyenne", "Blues"),
-        "pct_logement_entier": ("% logements entiers", "PuRd"),
+        "nb_annonces": ("Nombre d'annonces", ["#FFF5F0", "#FEE5D9", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#99000D"]),
+        "prix_moyen": ("Prix moyen (€)", ["#FFFFE5", "#F7FCB9", "#D9F0A3", "#ADDD8E", "#78C679", "#41AB5D", "#238443", "#005A32"]),
+        "note_moyenne": ("Note moyenne", ["#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594"]),
+        "pct_logement_entier": ("% logements entiers", ["#F7F4F9", "#E7E1EF", "#D4B9DA", "#C994C7", "#DF65B0", "#E7298A", "#CE1256", "#91003F"]),
     }
     
     # Créer des feature groups pour chaque métrique
-    feature_groups = {}
-    
-    for col, (label, palette) in metriques.items():
+    for col, (label, colors) in metriques.items():
         fg = folium.FeatureGroup(name=label, show=col == "nb_annonces")  # Première couche visible par défaut
         
-        folium.Choropleth(
-            geo_data=arrondissements.__geo_interface__,
-            data=arrondissements,
-            columns=["arrondissement", col],
-            key_on="feature.properties.arrondissement",
-            fill_color=palette,
-            fill_opacity=0.7,
-            line_opacity=0.4,
-            legend_name=label,
-            highlight=True,
-        ).add_to(fg)
+        # Calculer min/max pour la normalisation
+        values = arrondissements[col].dropna()
+        if len(values) > 0:
+            vmin, vmax = values.min(), values.max()
+        else:
+            vmin, vmax = 0, 1
         
-        # Ajouter les tooltips interactifs à chaque feature group
+        # Créer la colormap avec les couleurs personnalisées
+        colormap = cm.LinearColormap(colors=colors, vmin=vmin, vmax=vmax)
+        
+        # Fonction de style
+        def style_function(feature, col=col, colormap=colormap):
+            value = feature['properties'].get(col)
+            if value is None or pd.isna(value):
+                return {
+                    'fillColor': '#gray',
+                    'color': 'black',
+                    'weight': 1,
+                    'fillOpacity': 0.5
+                }
+            return {
+                'fillColor': colormap(value),
+                'color': 'black',
+                'weight': 1,
+                'fillOpacity': 0.7
+            }
+        
+        # Ajouter le GeoJson avec style et tooltip
         folium.GeoJson(
             arrondissements.__geo_interface__,
-            style_function=lambda x: {"fillOpacity": 0, "weight": 0},
+            style_function=style_function,
             tooltip=folium.GeoJsonTooltip(
                 fields=["arrondissement", "nb_annonces", "prix_moyen", "note_moyenne", "pct_logement_entier"],
                 aliases=["Arrondissement", "Nb annonces", "Prix moyen (€)", "Note moyenne", "% logements entiers"],
@@ -210,24 +225,14 @@ def _create_choropleth_map(arrondissements: gpd.GeoDataFrame) -> folium.Map:
             )
         ).add_to(fg)
         
+        # Ajouter la légende de couleur
+        colormap.caption = label
+        colormap.add_to(m)
+        
         fg.add_to(m)
-        feature_groups[label] = fg
     
-    # Ajouter un contrôle de couches avec une seule couche visible à la fois
-    folium.LayerControl(collapsed=False, exclusive=True).add_to(m)
-    
-    # Ajouter un script JavaScript pour garantir qu'une seule couche est visible
-    m.get_root().html.add_child(folium.Element("""
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var layers = document.querySelectorAll('.leaflet-control-layers-overlays input[type="checkbox"]');
-        layers.forEach(function(layer) {
-            layer.type = 'radio';
-            layer.name = 'metric-layer';
-        });
-    });
-    </script>
-    """))
+    # Ajouter un contrôle de couches
+    folium.LayerControl(collapsed=False).add_to(m)
     
     return m
 

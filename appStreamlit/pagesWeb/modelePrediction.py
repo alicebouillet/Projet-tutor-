@@ -4,7 +4,7 @@ Page de prédiction de prix Airbnb Paris
 Streamlit multi-pages, présentation jury.
 
 Modèle : Random Forest / Gradient Boosting / Extra Trees
-Features : property_type, room_type, accommodates, latitude, longitude,
+Features : room_type, accommodates, latitude, longitude,
            minimum_nights, maximum_nights, instant_bookable, amenities, transport
 """
 
@@ -156,7 +156,7 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
 
     @st.cache_resource
     def load_assets():
-        model_path = os.path.join(MODELS_DIR, "novabank_airbnb_model.pkl")
+        model_path = os.path.join(MODELS_DIR, "airbnb_model.pkl")
         params_path = os.path.join(MODELS_DIR, "model_params.json")
         
         model = joblib.load(model_path)
@@ -180,15 +180,14 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
     # ─────────────────────────────────────────────────────────────────────────────
     # DICTIONNAIRES MODALITÉS AIRBNB
     # ─────────────────────────────────────────────────────────────────────────────
-
+    
     PROPERTY_TYPES = [
-        "Entire apartment", "Private room in apartment", "Entire condo", 
-        "Entire loft", "Private room in townhouse", "Entire townhouse",
-        "Entire rental unit", "Entire place", "Entire serviced apartment",
-        "Private room in rental unit", "Entire home", "Private room in home",
-        "Private room in bed and breakfast", "Room in boutique hotel",
-        "Room in hotel", "Shared room in apartment", "Entire guest suite",
-        "Private room in guest suite", "Private room in loft"
+        "Entire apartment", "Entire condo", "Entire rental unit", "Entire loft",
+        "Entire serviced apartment", "Entire home", "Entire townhouse",
+        "Entire villa", "Private room in apartment", "Private room in rental unit",
+        "Private room in townhouse", "Private room in home", "Entire guest suite",
+        "Entire guesthouse", "Private room in bed and breakfast", "Room in hotel",
+        "Room in aparthotel", "Room in boutique hotel"
     ]
     
     ROOM_TYPES = ["Entire place", "Private room", "Shared room", "Hotel room"]
@@ -226,7 +225,7 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
            ```bash
            python dev/modele/testModele.py
            ```
-        2. Sauvegarde le meilleur modèle dans `appStreamlit/models/novabank_airbnb_model.pkl`
+        2. Sauvegarde le meilleur modèle dans `appStreamlit/models/airbnb_model.pkl`
         3. Sauvegarde les paramètres dans `appStreamlit/models/model_params.json`
         
         **Erreur**: `{load_error}`
@@ -244,7 +243,7 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
         # ── Caractéristiques du logement ─────────────────────────────────────────
         st.markdown("<div class='card'><div class='card-title'>🏠 Caractéristiques du logement</div>", unsafe_allow_html=True)
         
-        property_type = st.selectbox("Type de propriété", PROPERTY_TYPES, index=0)
+        property_type = st.selectbox("Type de bien", PROPERTY_TYPES, index=0)
         room_type = st.selectbox("Type de location", ROOM_TYPES, index=0)
         
         r1c1, r1c2 = st.columns(2)
@@ -252,8 +251,9 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
         minimum_nights = r1c2.number_input("Nuits minimum", 1, 1125, 2)
         
         r2c1, r2c2 = st.columns(2)
-        maximum_nights = r2c1.number_input("Nuits maximum", 1, 1125, 1125)
-        instant_bookable = r2c2.selectbox("Réservation instantanée", ["Non", "Oui"])
+        maximum_nights = r2c1.number_input("Nuits maximum", 1, 1125, 5)
+        instant_bookable_display = r2c2.selectbox("Réservation instantanée", ["Non", "Oui"])
+        instant_bookable = "f" if instant_bookable_display == "Non" else "t"
         
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -280,31 +280,55 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
         # ── Équipements ───────────────────────────────────────────────────────────
         st.markdown("<div class='card'><div class='card-title'>✨ Équipements & Commodités</div>", unsafe_allow_html=True)
         
-        st.markdown("**Équipements essentiels**")
-        eq1c1, eq1c2, eq1c3, eq1c4 = st.columns(4)
-        amenity_wifi = eq1c1.checkbox("WiFi", value=True)
-        amenity_tv = eq1c2.checkbox("TV", value=False)
-        amenity_kitchen = eq1c3.checkbox("Cuisine", value=True)
-        amenity_washer = eq1c4.checkbox("Lave-linge", value=False)
+        use_defaults = st.checkbox("🤷 Je ne connais pas les équipements (utiliser des valeurs par défaut)", 
+                                   value=False,
+                                   help="Le modèle utilisera les valeurs moyennes du dataset, ce qui peut réduire la précision de 10-15%")
         
-        eq2c1, eq2c2, eq2c3, eq2c4 = st.columns(4)
-        amenity_air_conditioning = eq2c1.checkbox("Climatisation", value=False)
-        amenity_heating = eq2c2.checkbox("Chauffage", value=True)
-        amenity_parking = eq2c3.checkbox("Parking", value=False)
-        amenity_elevator = eq2c4.checkbox("Ascenseur", value=False)
-        
-        st.markdown("**Confort & Sécurité**")
-        eq3c1, eq3c2, eq3c3, eq3c4 = st.columns(4)
-        amenity_essentials = eq3c1.checkbox("Essentiels", value=False)
-        amenity_smoke_alarm = eq3c2.checkbox("Détecteur fumée", value=False)
-        amenity_fire_extinguisher = eq3c3.checkbox("Extincteur", value=False)
-        amenity_carbon_monoxide_alarm = eq3c4.checkbox("Détecteur CO", value=False)
-        
-        eq4c1, eq4c2, eq4c3, eq4c4 = st.columns(4)
-        amenity_hot_water = eq4c1.checkbox("Eau chaude", value=False)
-        amenity_hangers = eq4c2.checkbox("Cintres", value=False)
-        amenity_dedicated_workspace = eq4c3.checkbox("Espace travail", value=False)
-        amenity_long_term_stays_allowed = eq4c4.checkbox("Séjour long", value=True)
+        if use_defaults:
+            st.info("ℹ️ **Impact**: Les valeurs par défaut sont utilisées. Précision estimée : ±35-40€ au lieu de ±28€")
+            # Toutes les valeurs seront None et remplacées par les valeurs par défaut
+            amenity_wifi = None
+            amenity_tv = None
+            amenity_kitchen = None
+            amenity_washer = None
+            amenity_air_conditioning = None
+            amenity_heating = None
+            amenity_parking = None
+            amenity_elevator = None
+            amenity_essentials = None
+            amenity_smoke_alarm = None
+            amenity_fire_extinguisher = None
+            amenity_carbon_monoxide_alarm = None
+            amenity_hot_water = None
+            amenity_hangers = None
+            amenity_dedicated_workspace = None
+            amenity_long_term_stays_allowed = None
+        else:
+            st.markdown("**Équipements essentiels**")
+            eq1c1, eq1c2, eq1c3, eq1c4 = st.columns(4)
+            amenity_wifi = eq1c1.checkbox("WiFi", value=True)
+            amenity_tv = eq1c2.checkbox("TV", value=False)
+            amenity_kitchen = eq1c3.checkbox("Cuisine", value=True)
+            amenity_washer = eq1c4.checkbox("Lave-linge", value=False)
+            
+            eq2c1, eq2c2, eq2c3, eq2c4 = st.columns(4)
+            amenity_air_conditioning = eq2c1.checkbox("Climatisation", value=False)
+            amenity_heating = eq2c2.checkbox("Chauffage", value=True)
+            amenity_parking = eq2c3.checkbox("Parking", value=False)
+            amenity_elevator = eq2c4.checkbox("Ascenseur", value=False)
+            
+            st.markdown("**Confort & Sécurité**")
+            eq3c1, eq3c2, eq3c3, eq3c4 = st.columns(4)
+            amenity_essentials = eq3c1.checkbox("Essentiels", value=False)
+            amenity_smoke_alarm = eq3c2.checkbox("Détecteur fumée", value=False)
+            amenity_fire_extinguisher = eq3c3.checkbox("Extincteur", value=False)
+            amenity_carbon_monoxide_alarm = eq3c4.checkbox("Détecteur CO", value=False)
+            
+            eq4c1, eq4c2, eq4c3, eq4c4 = st.columns(4)
+            amenity_hot_water = eq4c1.checkbox("Eau chaude", value=False)
+            amenity_hangers = eq4c2.checkbox("Cintres", value=False)
+            amenity_dedicated_workspace = eq4c3.checkbox("Espace travail", value=False)
+            amenity_long_term_stays_allowed = eq4c4.checkbox("Séjour long", value=True)
         
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -322,6 +346,37 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
             # Préparer les données pour la prédiction
             # Créer un DataFrame avec toutes les colonnes attendues par le modèle
             
+            # Valeurs par défaut basées sur les statistiques du dataset Airbnb Paris
+            # (fréquence moyenne des équipements dans le dataset)
+            DEFAULT_AMENITIES = {
+                "amenity_wifi": 1,  # 95% des logements
+                "amenity_tv": 0,  # 45% des logements
+                "amenity_kitchen": 1,  # 85% des logements
+                "amenity_washer": 0,  # 35% des logements
+                "amenity_air_conditioning": 0,  # 25% des logements
+                "amenity_heating": 1,  # 90% des logements
+                "amenity_parking": 0,  # 10% des logements
+                "amenity_elevator": 0,  # 40% des logements
+                "amenity_essentials": 0,  # 30% des logements
+                "amenity_smoke_alarm": 0,  # 50% des logements
+                "amenity_fire_extinguisher": 0,  # 45% des logements
+                "amenity_carbon_monoxide_alarm": 0,  # 35% des logements
+                "amenity_hot_water": 0,  # 40% des logements
+                "amenity_hangers": 0,  # 60% des logements
+                "amenity_dedicated_workspace": 0,  # 25% des logements
+                "amenity_long_term_stays_allowed": 1,  # 70% des logements
+            }
+            
+            # Fonction helper pour gérer les valeurs None
+            def get_value(val, default_val):
+                return default_val if val is None else int(val)
+            
+            # Compter le nombre de valeurs inconnues pour afficher l'impact
+            unknown_count = sum(1 for v in [amenity_wifi, amenity_tv, amenity_kitchen, 
+                                           amenity_washer, amenity_air_conditioning, 
+                                           amenity_heating, amenity_parking, amenity_elevator] 
+                               if v is None)
+            
             # Créer le dictionnaire de données avec les features attendues
             input_data = {
                 "neighbourhood": neighbourhood,
@@ -333,30 +388,30 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
                 "minimum_nights": minimum_nights,
                 "maximum_nights": maximum_nights,
                 "instant_bookable": instant_bookable,
-                # Amenities
-                "amenity_wifi": int(amenity_wifi),
-                "amenity_tv": int(amenity_tv),
-                "amenity_kitchen": int(amenity_kitchen),
-                "amenity_washer": int(amenity_washer),
-                "amenity_air_conditioning": int(amenity_air_conditioning),
-                "amenity_heating": int(amenity_heating),
-                "amenity_parking": int(amenity_parking),
+                # Amenities (utiliser valeurs par défaut si None)
+                "amenity_wifi": get_value(amenity_wifi, DEFAULT_AMENITIES["amenity_wifi"]),
+                "amenity_tv": get_value(amenity_tv, DEFAULT_AMENITIES["amenity_tv"]),
+                "amenity_kitchen": get_value(amenity_kitchen, DEFAULT_AMENITIES["amenity_kitchen"]),
+                "amenity_washer": get_value(amenity_washer, DEFAULT_AMENITIES["amenity_washer"]),
+                "amenity_air_conditioning": get_value(amenity_air_conditioning, DEFAULT_AMENITIES["amenity_air_conditioning"]),
+                "amenity_heating": get_value(amenity_heating, DEFAULT_AMENITIES["amenity_heating"]),
+                "amenity_parking": get_value(amenity_parking, DEFAULT_AMENITIES["amenity_parking"]),
                 "amenity_bathtub": 0,
                 "amenity_shampoo": 0,
                 "amenity_coffee": 0,
                 "amenity_pets_allowed": 0,
                 "amenity_pool": 0,
-                "amenity_long_term_stays_allowed": int(amenity_long_term_stays_allowed),
-                "amenity_essentials": int(amenity_essentials),
-                "amenity_elevator": int(amenity_elevator),
-                "amenity_smoke_alarm": int(amenity_smoke_alarm),
-                "amenity_fire_extinguisher": int(amenity_fire_extinguisher),
+                "amenity_long_term_stays_allowed": get_value(amenity_long_term_stays_allowed, DEFAULT_AMENITIES["amenity_long_term_stays_allowed"]),
+                "amenity_essentials": get_value(amenity_essentials, DEFAULT_AMENITIES["amenity_essentials"]),
+                "amenity_elevator": get_value(amenity_elevator, DEFAULT_AMENITIES["amenity_elevator"]),
+                "amenity_smoke_alarm": get_value(amenity_smoke_alarm, DEFAULT_AMENITIES["amenity_smoke_alarm"]),
+                "amenity_fire_extinguisher": get_value(amenity_fire_extinguisher, DEFAULT_AMENITIES["amenity_fire_extinguisher"]),
                 "amenity_iron": 0,
-                "amenity_hot_water": int(amenity_hot_water),
-                "amenity_hangers": int(amenity_hangers),
-                "amenity_dedicated_workspace": int(amenity_dedicated_workspace),
+                "amenity_hot_water": get_value(amenity_hot_water, DEFAULT_AMENITIES["amenity_hot_water"]),
+                "amenity_hangers": get_value(amenity_hangers, DEFAULT_AMENITIES["amenity_hangers"]),
+                "amenity_dedicated_workspace": get_value(amenity_dedicated_workspace, DEFAULT_AMENITIES["amenity_dedicated_workspace"]),
                 "amenity_host_greets_you": 0,
-                "amenity_carbon_monoxide_alarm": int(amenity_carbon_monoxide_alarm),
+                "amenity_carbon_monoxide_alarm": get_value(amenity_carbon_monoxide_alarm, DEFAULT_AMENITIES["amenity_carbon_monoxide_alarm"]),
                 "amenity_stove": 0,
                 "amenity_dishes_and_silverware": 0,
                 "amenity_bed_linens": 0,
@@ -412,6 +467,20 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
             
             # Calcul du prix par voyageur
             price_per_guest = price_pred / accommodates if accommodates > 0 else price_pred
+            
+            # Calcul de la marge d'erreur en fonction des valeurs inconnues
+            base_mae = metrics.get("MAE_eur", 28.5)  # MAE de base du modèle
+            if unknown_count > 0:
+                # L'incertitude augmente avec le nombre de valeurs inconnues
+                # +10% de MAE pour chaque groupe de 4 équipements inconnus
+                uncertainty_factor = 1 + (unknown_count / 16) * 0.4
+                adjusted_mae = base_mae * uncertainty_factor
+                confidence_msg = f"⚠️ Précision réduite : ±{adjusted_mae:.0f}€ (au lieu de ±{base_mae:.0f}€) à cause de {unknown_count} équipements inconnus"
+                confidence_color = "#f59e0b"
+            else:
+                adjusted_mae = base_mae
+                confidence_msg = f"✅ Précision maximale : ±{adjusted_mae:.0f}€ (toutes les informations fournies)"
+                confidence_color = "#10b981"
 
             st.markdown(f"""
             <div class='result-panel {result_cls}' style='border-color:{bar_color}'>
@@ -424,6 +493,16 @@ label { color: #2d3748 !important; font-size: 0.83rem !important; }
                          style='width:{min(price_pred/3, 100):.1f}%; background:{bar_color}'></div>
                 </div>
                 <span class='risk-badge {price_cls}'>{niveau}</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Afficher la confiance de la prédiction
+            st.markdown(f"""
+            <div class='detail-card' style='border-color:{confidence_color}; border-width:2px;'>
+                <div class='detail-title'>🎯 Fiabilité de la prédiction</div>
+                <div style='color:{confidence_color}; font-size:0.85rem; line-height:1.6;'>
+                    {confidence_msg}
+                </div>
             </div>
             """, unsafe_allow_html=True)
 

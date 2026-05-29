@@ -30,9 +30,9 @@ def _load_data() -> pd.DataFrame | None:
     if "price" in df.columns:
         df["price"] = pd.to_numeric(df["price"], errors="coerce")
     
-    # Filtrer les prix aberrants (> 1000€)
+    # Filtrer les prix aberrants (>3000€)
     if "price" in df.columns:
-        df = df[df["price"] <= 1000]
+        df = df[df["price"] <= 3000]
     
     return df
 

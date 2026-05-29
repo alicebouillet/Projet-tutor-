@@ -3,7 +3,7 @@ from pagesWeb import presentation, analyseDonnee, cartographie, modelePrediction
 #from utils.data_loader import load_all_data
 
 st.set_page_config(
-    page_title="RiskScore Analytics",  
+    page_title="Airbnb Analytics",  
     layout="wide",                  
     initial_sidebar_state="expanded" 
 )

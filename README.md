@@ -431,26 +431,10 @@ Projet académique - Tous droits réservés
 ## 📞 Contact
 
 Pour toute question relative au projet :
-- **Auteurs** : Alice & Claudia
-- **Institution** : Université de Poitiers - INGE2
+- **Institution** : ENSAR - Université de Poitiers 
 - **Cadre** : Projet Tuteuré - Science des Données
 
 ---
 
-## 🙏 Remerciements
-
-- **Open Data Paris** pour les données géographiques des arrondissements
-- **Airbnb** pour les données d'annonces (usage académique)
-- **OSM/RATP/SNCF** pour les données de transports en commun
-- **Streamlit** pour le framework de visualisation
-- **Scikit-learn, XGBoost, LightGBM, CatBoost** pour les algorithmes de machine learning
-
----
-
 <div align="center">
-
-**⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile ! ⭐**
-
-Made with ❤️ and 🐍 by Alice & Claudia
-
 </div>

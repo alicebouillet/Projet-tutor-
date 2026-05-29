@@ -1,0 +1,21 @@
+# Fichiers HTML volumineux générés
+carte_airbnb_points.html
+carte_airbnb_paris.html
+
+# Environment
+env_ptut/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
